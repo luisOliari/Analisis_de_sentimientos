@@ -4,12 +4,12 @@ import google.generativeai as genai # pip install -q -U google-generativeai
 import pandas as pd
 import json
 import os  # Agrega esta línea
-from dotenv import load_dotenv  # Agrega esta línea
+# from dotenv import load_dotenv  # Agrega esta línea
 import plotly.express as px
 
 
 # Cargar las variables de entorno desde el archivo .env
-load_dotenv()
+# load_dotenv()
 
 st.set_page_config(
     page_title="Análisis de Sentimiento con Google Gemini",
