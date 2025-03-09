@@ -1,0 +1,3 @@
+google-generativeai
+python-dotenv  # Si usas variables de entorno
+streamlit
