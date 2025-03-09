@@ -6,6 +6,7 @@ import json
 import os  # Agrega esta línea
 # from dotenv import load_dotenv  # Agrega esta línea
 import plotly.express as px
+import time  # <-- Añade al inicio del código
 
 
 # Cargar las variables de entorno desde el archivo .env
@@ -33,12 +34,16 @@ def darColorResultado(x):
 
 
 #Prompt del sistema
-systemPrompt="""
-Eres un experto analizando el sentimiento de textos entregados, 
-el usuario te va a entregar una lista de comentarios y para cada uno 
-vas a responder si su sentimiento es POSITIVO, NEGATIVO o NEUTRAL 
-en formato JSON con un array de los campos comentario y sentimiento, no generar markdown
-"""
+systemPrompt=""" Eres un analizador de sentimientos. El usuario te dará comentarios.
+**Instrucciones estrictas:**
+1. Analiza cada comentario.
+2. Clasifícalo como POSITIVO, NEUTRAL o NEGATIVO.
+3. Devuelve SOLO un JSON válido (sin texto adicional) con este formato:
+[
+    {"comentario": "texto 1", "sentimiento": "POSITIVO"},
+    {"comentario": "texto 2", "sentimiento": "NEGATIVO"}
+] """
+
 # Cargamos la API Key de secrets.toml
 # GOOGLE_API_KEY="_API_KEY_COPIADA_DE_GOOGLE_AI_STUDIO"
 # La API se obtiene de https://aistudio.google.com/
@@ -73,8 +78,10 @@ with c2:
             try:
             # Enviamos el prompt
                 response = model.generate_content(prompt)
+                time.sleep(2)  # <-- Espera 2 segundos entre consultas
             # Cargamos el resultado como JSON
-                resultado = json.loads(response.text)
+                respuesta_limpia = response.text.replace('```json', '').replace('```', '').strip()
+                resultado = json.loads(respuesta_limpia)
             # Convertimos el resultado en dataframe
                 dfElementos = pd.DataFrame(resultado)  
             # Calculamos las métricas
